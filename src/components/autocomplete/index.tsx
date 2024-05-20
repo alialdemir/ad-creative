@@ -6,9 +6,6 @@ import { AcAutoComplateItem } from "./types";
 import { sleep } from "@/utils/sleep";
 import { Box } from "@mui/material";
 
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-
 const AcAutocomplete = ({
   options,
   label,
@@ -25,7 +22,6 @@ const AcAutocomplete = ({
   const loading = open && options.length === 0;
   const [search, setSearch] = useState("");
   const [error, setError] = useState<any>(undefined);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -67,13 +63,13 @@ const AcAutocomplete = ({
         options={localOptions}
         disableCloseOnSelect
         loading={loading}
+        autoFocus
         onError={(error) => setError(error)}
         renderInput={(params) => (
           <TextField
             {...params}
             label={label}
             variant="outlined"
-            inputRef={inputRef}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
@@ -95,9 +91,9 @@ const AcAutocomplete = ({
         }}
         getOptionLabel={(option: any) => option.name}
         renderOption={(props, option, { index, selected }) => (
-          <Box key={index}>
+          <div {...props} key={index}>
             <Item option={option} search={search} selected={selected} />
-          </Box>
+          </div>
         )}
       />
     </>
