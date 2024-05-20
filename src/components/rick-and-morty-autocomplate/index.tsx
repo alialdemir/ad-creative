@@ -1,37 +1,19 @@
 import React, { useState } from "react";
-import Head from "next/head";
 import AcAutocomplete from "@/components/autocomplete";
-import { AcAutoComplateItem } from "@/components/autocomplete/types";
-import ApolloProvider from "@/graphql/ApolloProvider";
 import Card from "@mui/material/Card";
+import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import Avatar from "@mui/material/Avatar";
 import CardContent from "@mui/material/CardContent";
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { gql, useQuery } from "@apollo/client";
-import parse from "html-react-parser";
+import {  useQuery } from "@apollo/client";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import GET_CHARACTERS from "@/graphql/queries/get_characters";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-import {
-  TextField,
-  Autocomplete,
-  CircularProgress,
-  Avatar,
-  Box,
-} from "@mui/material";
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const GET_CHARACTERS = gql`
-  query GetCharacters($name: String!) {
-    characters(filter: { name: $name }) {
-      results {
-        id
-        name
-        image
-        episode {
-          id
-        }
-      }
-    }
-  }
-`;
 
 const highlightMatch = (text: string, query: string) => {
   const parts = text.split(new RegExp(`(${query})`, "gi"));
@@ -89,12 +71,23 @@ export default function RickandMortyAutocomplete() {
 const RickandMortyAutocompleteItem = ({
   option,
   search,
+  selected,
 }: {
   option: Character;
   search: string;
+  selected: boolean;
 }) => {
   return (
-    <Box component="li" sx={{ display: "flex", alignItems: "center", padding:2}}>
+    <Box
+      component="li"
+      sx={{ display: "flex", alignItems: "center", padding: 2 }}
+    >
+      <Checkbox
+        icon={icon}
+        checkedIcon={checkedIcon}
+        style={{ marginRight: 8 }}
+        checked={selected}
+      />
       <Avatar src={option.image} alt={option.name} sx={{ mr: 2 }} />
       <Box>
         <Typography variant="body1">
