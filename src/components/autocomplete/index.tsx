@@ -91,9 +91,13 @@ const AcAutocomplete = ({
         }}
         getOptionLabel={(option: any) => option.name}
         renderOption={(props, option, { index, selected }) => (
-          <div {...props} key={index}>
-            <Item option={option} search={search} selected={selected} />
-          </div>
+            <Item
+              option={option}
+              search={search}
+              selected={selected}
+              props={props}
+              // {...props}
+            />
         )}
       />
     </>

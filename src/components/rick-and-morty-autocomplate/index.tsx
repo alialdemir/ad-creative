@@ -70,15 +70,18 @@ const RickandMortyAutocompleteItem = ({
   option,
   search,
   selected,
+  props,
 }: {
   option: Character;
   search: string;
   selected: boolean;
+  props: any;
 }) => {
   return (
     <Box
       component="li"
       sx={{ display: "flex", alignItems: "center", padding: 2 }}
+        {...props}
     >
       <Checkbox
         icon={icon}
