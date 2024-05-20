@@ -1,8 +1,11 @@
 import Head from "next/head";
-import styles from "@/styles/Home.module.css";
-import AcAutocomplete from "@/components/autocomplete";
-import { AcAutoComplateItem } from "@/components/autocomplete/types";
-import { Card, CardContent, CardHeader, Container, Typography } from "@mui/material";
+import RickandMortyAutocomplete from "@/components/rick-and-morty-autocomplate";
+import ApolloProvider from "@/graphql/ApolloProvider";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+ 
 
 export default function Home() {
   return (
@@ -14,25 +17,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Container>
-          <Card sx={{ width: 300 }}>
-            <CardContent>
-              <Typography variant="h5">Rick and Morty</Typography>
-              <AcAutocomplete options={top100Films} />
-            </CardContent>
-          </Card>
-        </Container>
+        <ApolloProvider>
+          <Container>
+            <RickandMortyAutocomplete />
+          </Container>
+        </ApolloProvider>
+        ,
       </main>
     </>
   );
 }
-
-const top100Films: AcAutoComplateItem[] = [
-  { label: "The Shawshank Redemption", value: "1994" },
-  { label: "The Godfather", value: "1972" },
-  { label: "The Godfather: Part II", value: "1974" },
-  { label: "The Dark Knight", value: "2008" },
-  { label: "12 Angry Men", value: "1957" },
-  { label: "Schindler's List", value: "1993" },
-  { label: "Pulp Fiction", value: "1994" },
-];

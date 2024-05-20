@@ -1,18 +1,28 @@
-// import * as React from "react";
+import React, { ReactElement, cloneElement, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from "@mui/material/CircularProgress";
 import { AcAutoComplateItem } from "./types";
-import { CircularProgress } from "@mui/material";
-import React from "react";
 import { sleep } from "@/utils/sleep";
+import { Box } from "@mui/material";
 
-export default function AcAutocomplete({ options }: { options: AcAutoComplateItem[] }) {
-  const [open, setOpen] = React.useState(false);
-  const [localOptions, setLocalOptions] =
-    React.useState<readonly AcAutoComplateItem[]>([]);
+const AcAutocomplete = ({
+  options,
+  label,
+  onInputChange,
+  Item,
+}: {
+  options: AcAutoComplateItem[];
+  label: string;
+  onInputChange: Function;
+  Item: any;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [localOptions, setLocalOptions] = useState<AcAutoComplateItem[]>([]);
   const loading = open && options.length === 0;
-    
-  React.useEffect(() => {
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
     let active = true;
 
     if (!loading) {
@@ -20,7 +30,7 @@ export default function AcAutocomplete({ options }: { options: AcAutoComplateIte
     }
 
     (async () => {
-      await sleep(13); // For demo purposes.
+      await sleep(100);
 
       if (active) {
         setLocalOptions([...options]);
@@ -32,45 +42,53 @@ export default function AcAutocomplete({ options }: { options: AcAutoComplateIte
     };
   }, [loading]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!open) {
       setLocalOptions([]);
     }
   }, [open]);
 
+  useEffect(() => {
+    setLocalOptions(options);
+  }, [options]);
 
   return (
     <Autocomplete
-      id="asynchronous-demo"
-      sx={{ width: 300 }}
-      open={open}
-      onOpen={() => {
-        setOpen(true);
+      options={localOptions}
+      getOptionLabel={(option: any) => option.name}
+      onInputChange={(event: any, newInputValue: string) => {
+        setSearch(newInputValue);
+        if (typeof onInputChange === "function") {
+          onInputChange(event, newInputValue);
+        }
       }}
-      onClose={() => {
-        setOpen(false);
-      }}
-      isOptionEqualToValue={(option, value) => option.label === value.label}
-      getOptionLabel={(option) => option.label}
-      options={options}
       loading={loading}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Asynchronous"
+          label={label}
+          variant="outlined"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
-              <React.Fragment>
+              <>
                 {loading ? (
                   <CircularProgress color="inherit" size={20} />
                 ) : null}
                 {params.InputProps.endAdornment}
-              </React.Fragment>
+              </>
             ),
           }}
         />
       )}
+      renderOption={(index: number, option: AcAutoComplateItem) => (
+        <Box key={index}>
+          <Item option={option} search={search} />
+          {/* {cloneElement(item as ReactElement<any>, { option, search })} */}
+        </Box>
+      )}
     />
   );
-}
+};
+
+export default AcAutocomplete;
