@@ -58,9 +58,7 @@ export default function RickandMortyAutocomplete() {
             label={"Search for a character"}
             options={characterOptions}
             Item={RickandMortyAutocompleteItem}
-          >
-            <RickandMortyAutocompleteItem search={""} />
-          </AcAutocomplete>
+          />
         </CardContent>
       </Card>
       {error && <p>Error: {error.message}</p>}

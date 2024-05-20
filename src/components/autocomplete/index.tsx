@@ -24,7 +24,7 @@ const AcAutocomplete = ({
   const [localOptions, setLocalOptions] = useState<AcAutoComplateItem[]>([]);
   const loading = open && options.length === 0;
   const [search, setSearch] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<any>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const AcAutocomplete = ({
     return () => {
       active = false;
     };
-  }, [loading]);
+  }, [loading, options]);
 
   useEffect(() => {
     if (!open) {
@@ -93,14 +93,11 @@ const AcAutocomplete = ({
             onInputChange(event, newInputValue);
           }
         }}
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option: any) => option.name}
         renderOption={(props, option, { index, selected }) => (
-          <Box {...props} key={index}>
+          <Box key={index}>
             <Item option={option} search={search} selected={selected} />
           </Box>
-        )}
-        renderInput={(params) => (
-          <TextField {...params} label={label} placeholder="Favorites" />
         )}
       />
     </>
